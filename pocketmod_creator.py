@@ -33,7 +33,7 @@ import argparse
 import datetime
 
 # PyPDF2 repo: https://github.com/mstamy2/PyPDF2
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfReader, PdfWriter, Transformation
 
 def check_input_file(input_file):
 	"""Check the input file is a valid PDF file."""
@@ -41,13 +41,13 @@ def check_input_file(input_file):
 		raise FileNotFoundError('Please enter a valid filename.')
 	if not os.path.basename(input_file)[-3:].lower() == 'pdf':
 		raise ValueError('File type is not a pdf.')
-	if PdfFileReader(input_file).getNumPages() > 8:
+	if len(PdfReader(input_file).pages) > 8:
 		print('\nInput file contains more than 8 pages.\n'
 			'Only the first 8 will be converted.')
 
 def input_size_orientation(input_file):
 	"""Determine the paper size and orientation of the input file."""
-	media_box = PdfFileReader(input_file).getPage(0).mediaBox
+	media_box = PdfReader(input_file).pages[0].mediabox
 	
 	# 0.3528 is the mm approximation of 1/72 of an inch
 	# PyPDF2 uses increments of 1/72 of an inch for sizing
@@ -84,8 +84,8 @@ def pocket_modder(input_file, width, height, orientation):
 	A3-sized output PDF.
 	"""
 	with open(input_file, 'rb') as input_pdf:
-		input_pdf = PdfFileReader(input_pdf)
-		writer = PdfFileWriter()
+		input_pdf = PdfReader(input_pdf)
+		writer = PdfWriter()
 		# 0.3528 is the mm approximation of 1/72 of an inch
 		# PyPDF2 uses increments of 1/72 of an inch for sizing
 		pypdf_scale = 0.3528
@@ -124,17 +124,22 @@ def pocket_modder(input_file, width, height, orientation):
 				7 : (x_translation * 2, y_translation, 180)}
 			}
 
-		new_pdf = writer.addBlankPage(height / pypdf_scale, width / pypdf_scale)
+		new_pdf = writer.add_blank_page(height / pypdf_scale, width / pypdf_scale)
 		i = 0
-		while i < 8 and i < input_pdf.getNumPages():
-			content_page = input_pdf.getPage(i)
-			new_pdf.mergeRotatedScaledTranslatedPage(
-				content_page,
-				transformation_dict[orientation][i][2],
-				scale,
-				transformation_dict[orientation][i][0],
-				transformation_dict[orientation][i][1],
-				expand=False)
+		while i < 8 and i < len(input_pdf.pages):
+			content_page = input_pdf.pages[i]
+			# new_pdf.mergeRotatedScaledTranslatedPage(
+			# 	content_page,
+			# 	transformation_dict[orientation][i][2],
+			# 	scale,
+			# 	transformation_dict[orientation][i][0],
+			# 	transformation_dict[orientation][i][1],
+			# 	expand=False)
+			content_page.add_transformation(Transformation().rotate(transformation_dict[orientation][i][2]).scale(scale)) 
+			new_pdf.merge_page(content_page, expand=False)
+			print('--')
+			print(transformation_dict[orientation][i][2])
+			print(content_page)
 			i += 1
 
 		current_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
