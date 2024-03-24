@@ -26,8 +26,8 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
 
     #  Inside Page 1 | Inside Page 2 | Inside Page 3 | Inside Page 4 |
     # -------------- | ------------- | ------------- | ------------- |
-    #  Right Flap    | Right Cover   | Front Cover   | Left Flap     |
-    
+    #  Right Flap    | Back Cover    | Front Cover   | Left Flap     |
+
     if pageNo == 0:
         # Right Flap
         x = 5
