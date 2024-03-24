@@ -23,29 +23,42 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     height = 600
     # print("width: " + str(width))    
 
+
+    #  Inside Page 1 | Inside Page 2 | Inside Page 3 | Inside Page 4 |
+    # -------------- | ------------- | ------------- | ------------- |
+    #  Right Flap    | Right Cover   | Front Cover   | Left Flap     |
+    
     if pageNo == 0:
+        # Right Flap
         x = 5
         y = -30
     if pageNo == 1:
+        # Back Cover
         x = 205
         y = -30
     if pageNo == 2:
+        # Front Cover
         x = 405
         y = -30
     if pageNo == 3:
+        # Left Flap
         x = 605
         y = -30
     
     if pageNo == 4:
+        # Inside Page 4
         x = 0
         y = 260   
     if pageNo == 5:
+        # Inside Page 3
         x = 200
         y = 260    
     if pageNo == 6:
+        # Inside Page 2
         x = 400
         y = 260  
     if pageNo == 7:
+        # Inside Page 1
         x = 600
         y = 260
     
