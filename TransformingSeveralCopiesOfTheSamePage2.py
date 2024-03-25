@@ -11,7 +11,7 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     sourcepage = reader.pages[pageNo]
 
     # Scale
-    scale = 0.35 #scale and width calc...does not work well...
+    scale = 0.37 #scale and width calc...does not work well...
     op = Transformation().scale(sx=scale, sy=scale)
     sourcepage.add_transformation(op)
     
@@ -38,33 +38,33 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
         y = 10
     if pageNo == 7:
         # Back Cover
-        x = 205
+        x = 215
         y = 10
     if pageNo == 0:
         # Front Cover
-        x = 405
+        x = 415
         y = 10
     if pageNo == 2:
         # Left Flap
-        x = 605
+        x = 615
         y = 10
     
     if pageNo == 6:
         # Inside Page 4
         x = 5
-        y = 260
+        y = 300
     if pageNo == 4:
         # Inside Page 3
-        x = 225
-        y = 260    
+        x = 215
+        y = 300  
     if pageNo == 3:
         # Inside Page 2
-        x = 400
-        y = 260  
+        x = 415
+        y = 300 
     if pageNo == 5:
         # Inside Page 4
-        x = 600
-        y = 260
+        x = 615
+        y = 300
     
     print("Page: " + str(pageNo))    
     print(">x: " + str(x))    
@@ -75,17 +75,17 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     
 
     # Transformation().rotate(10).translate( # rotate without cut
-    if pageNo == 1 or pageNo == 7 or pageNo == 0 or pageNo == 2:
+    # if pageNo == 1 or pageNo == 7 or pageNo == 0 or pageNo == 2:
     # if pageNo == 0 or pageNo == 7:
     # if pageNo == 1 or pageNo == 7 or pageNo == 0:
     # if pageNo == 0:
-        destpage.merge_transformed_page(
-            sourcepage,
-            Transformation().translate(
-                x,
-                y,
-            ),
-        )
+    destpage.merge_transformed_page(
+        sourcepage,
+        Transformation().translate(
+            x,
+            y,
+        ),
+    )
 
 # Write file
 with open("output.pdf", "wb") as fp:
