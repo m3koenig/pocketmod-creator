@@ -11,13 +11,17 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     sourcepage = reader.pages[pageNo]
 
     # Scale
-    scale = 0.4 #scale and width calc...does not work well...
+    scale = 0.35 #scale and width calc...does not work well...
     op = Transformation().scale(sx=scale, sy=scale)
     sourcepage.add_transformation(op)
     
     # Get width in points
     width_in_points = sourcepage.mediabox.upper_right[0] - sourcepage.mediabox.upper_left[0]
-    # print("width_in_points: " + str(width_in_points))
+    print("width_in_points: " + str(width_in_points))
+
+    # # Get height in points
+    # width_in_height = sourcepage.mediabox.upper_right[0]
+    # print("width_in_height: " + str(width_in_height))
 
     width = 300 #width_in_points/3.5 #300
     height = 600
@@ -31,27 +35,27 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     if pageNo == 1:
         # Right Flap
         x = 5
-        y = -30
+        y = 10
     if pageNo == 7:
         # Back Cover
         x = 205
-        y = -30
+        y = 10
     if pageNo == 0:
         # Front Cover
         x = 405
-        y = -30
+        y = 10
     if pageNo == 2:
         # Left Flap
         x = 605
-        y = -30
+        y = 10
     
     if pageNo == 6:
         # Inside Page 4
-        x = 0
+        x = 5
         y = 260
     if pageNo == 4:
         # Inside Page 3
-        x = 200
+        x = 225
         y = 260    
     if pageNo == 3:
         # Inside Page 2
@@ -60,7 +64,7 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     if pageNo == 5:
         # Inside Page 4
         x = 600
-        y = 300
+        y = 260
     
     print("Page: " + str(pageNo))    
     print(">x: " + str(x))    
@@ -71,13 +75,17 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     
 
     # Transformation().rotate(10).translate( # rotate without cut
-    destpage.merge_transformed_page(
-        sourcepage,
-        Transformation().translate(
-            x,
-            y,
-        ),
-    )
+    if pageNo == 1 or pageNo == 7 or pageNo == 0 or pageNo == 2:
+    # if pageNo == 0 or pageNo == 7:
+    # if pageNo == 1 or pageNo == 7 or pageNo == 0:
+    # if pageNo == 0:
+        destpage.merge_transformed_page(
+            sourcepage,
+            Transformation().translate(
+                x,
+                y,
+            ),
+        )
 
 # Write file
 with open("output.pdf", "wb") as fp:
