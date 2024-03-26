@@ -11,7 +11,9 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     sourcepage = reader.pages[pageNo]
 
     # Scale
-    scale = 0.35 #scale and width calc...does not work well...
+    # 0.3528 is the mm approximation of 1/72 of an inch
+    # PyPDF2 uses increments of 1/72 of an inch for sizing
+    scale = 0.3528
     op = Transformation().scale(sx=scale, sy=scale)
     sourcepage.add_transformation(op)
     
