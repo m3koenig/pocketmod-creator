@@ -19,13 +19,13 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     
     # Get width in points
     width_in_points = sourcepage.mediabox.upper_right[0] - sourcepage.mediabox.upper_left[0]
-    print("width_in_points: " + str(width_in_points))
+    # print("width_in_points: " + str(width_in_points))
 
     # # Get height in points
     # width_in_height = sourcepage.mediabox.upper_right[0]
     # print("width_in_height: " + str(width_in_height))
 
-    width = 300 #width_in_points/3.5 #300
+    width = 300
     height = 600
     # print("width: " + str(width))    
 
@@ -38,39 +38,48 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
         # Right Flap
         x = 5
         y = 10
+        rotation = 0
     if pageNo == 7:
         # Back Cover
         x = 215
         y = 10
+        rotation = 0
     if pageNo == 0:
         # Front Cover
         x = 415
         y = 10
+        rotation = 0
     if pageNo == 2:
         # Left Flap
         x = 615
         y = 10
+        rotation = 0
     
     if pageNo == 6:
-        # Inside Page 4
-        x = 5
-        y = 300
+        # Inside Page 1
+        x = 205
+        y = 600
+        rotation = 180
     if pageNo == 4:
         # Inside Page 3
-        x = 215
-        y = 300  
+        x = 415
+        y = 600
+        rotation = 180
     if pageNo == 3:
         # Inside Page 2
-        x = 415
-        y = 300 
+        x = 615
+        y = 600
+        rotation = 180
     if pageNo == 5:
         # Inside Page 4
-        x = 615
-        y = 300
+        x = 815 # -200  if not rotated
+        y = 600 # half if not rotated
+        rotation = 180
     
     print("Page: " + str(pageNo))    
     print(">x: " + str(x))    
     print(">y: " + str(y))    
+    print(">rotation: " + str(rotation))    
 
     # print("sourcepage.mediabox.width: " + str(sourcepage.mediabox.width))
     # print("sourcepage.mediabox.height: " + str(sourcepage.mediabox.height))
@@ -83,7 +92,7 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     # if pageNo == 0:
     destpage.merge_transformed_page(
         sourcepage,
-        Transformation().translate(
+        Transformation().rotate(rotation).translate(
             x,
             y,
         ),
