@@ -11,7 +11,7 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     sourcepage = reader.pages[pageNo]
 
     # Scale
-    scale = 0.37 #scale and width calc...does not work well...
+    scale = 0.35 #scale and width calc...does not work well...
     op = Transformation().scale(sx=scale, sy=scale)
     sourcepage.add_transformation(op)
     
