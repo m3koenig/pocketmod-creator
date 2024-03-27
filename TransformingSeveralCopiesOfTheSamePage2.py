@@ -1,3 +1,5 @@
+import datetime
+
 from pypdf import PdfReader, PdfWriter, Transformation, PaperSize
 
 # Read source file
@@ -34,46 +36,56 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     # -------------- | ------------- | ------------- | ------------- |
     #  Right Flap    | Back Cover    | Front Cover   | Left Flap     |
 
+    upperY = 595
+    lowerY = 0
+
+    lowerStartX = 5
+    lowerNextPartX = 200
+
+    upperStartX = 210
+    upperNextPartX = 200
+
     if pageNo == 1:
         # Right Flap
-        x = 5
-        y = 10
+        x = lowerStartX
+        y = lowerY
         rotation = 0
     if pageNo == 7:
         # Back Cover
-        x = 215
-        y = 10
+        x = lowerStartX + (lowerNextPartX * 1)
+        y = lowerY
         rotation = 0
     if pageNo == 0:
         # Front Cover
-        x = 415
-        y = 10
+        x = lowerStartX + (lowerNextPartX * 2)
+        y = lowerY
         rotation = 0
     if pageNo == 2:
         # Left Flap
-        x = 615
-        y = 10
+        x = lowerStartX + (lowerNextPartX * 3)
+        y = lowerY
         rotation = 0
     
     if pageNo == 6:
         # Inside Page 1
-        x = 205
-        y = 600
+        x = upperStartX + (upperNextPartX * 0)
+        y = upperY
         rotation = 180
     if pageNo == 4:
         # Inside Page 3
-        x = 415
-        y = 600
+        x = upperStartX + (upperNextPartX * 1)
+        y = upperY
         rotation = 180
     if pageNo == 3:
         # Inside Page 2
-        x = 615
-        y = 600
+        x = upperStartX + (upperNextPartX * 2)
+        y = upperY
         rotation = 180
     if pageNo == 5:
         # Inside Page 4
-        x = 815 # -200  if not rotated
-        y = 600 # half if not rotated
+        # x = 820 # -200  if not rotated
+        x = upperStartX + (upperNextPartX * 3)
+        y = upperY # half if not rotated
         rotation = 180
     
     print("Page: " + str(pageNo))    
@@ -99,5 +111,7 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     )
 
 # Write file
-with open("output.pdf", "wb") as fp:
+current_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+output_pdf = 'output_{}.pdf'.format(current_time)
+with open(output_pdf, "wb") as fp:
     writer.write(fp)
