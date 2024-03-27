@@ -1,6 +1,7 @@
 import datetime
 
 from pypdf import PdfReader, PdfWriter, Transformation, PaperSize
+from pypdf.annotations import Line
 
 # Read source file
 reader = PdfReader("input.pdf")
@@ -36,13 +37,13 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     # -------------- | ------------- | ------------- | ------------- |
     #  Right Flap    | Back Cover    | Front Cover   | Left Flap     |
 
-    upperY = 595
+    upperY = 590
     lowerY = 0
 
-    lowerStartX = 5
+    lowerStartX = 0
     lowerNextPartX = 200
 
-    upperStartX = 210
+    upperStartX = 200
     upperNextPartX = 200
 
     if pageNo == 1:
@@ -101,7 +102,7 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
     # if pageNo == 1 or pageNo == 7 or pageNo == 0 or pageNo == 2:
     # if pageNo == 0 or pageNo == 7:
     # if pageNo == 1 or pageNo == 7 or pageNo == 0:
-    # if pageNo == 0:
+    # if pageNo == 0:    
     destpage.merge_transformed_page(
         sourcepage,
         Transformation().rotate(rotation).translate(
@@ -110,8 +111,36 @@ for pageNo in range(len(reader.pages)):  # Loop through all source pages
         ),
     )
 
+
+
+
+# Get page width and height
+page_width = destpage.artbox.width
+page_height = destpage.artbox.height
+
+# Calculate fold line coordinates
+fold_lines = []
+for i in range(1, 4):
+    fold_lines.append((i * page_width / 4, 0, i * page_width / 4, page_height))  # Horizontal lines
+
+for i in range(1, 2):
+    fold_lines.append((0, i * page_height / 2, page_width, i * page_height / 2))  # Vertical lines
+    
+# Add fold lines as annotations
+for start_x, start_y, end_x, end_y in fold_lines:
+    annotation = Line(
+        rect=(start_x, start_y, end_x, end_y),
+        p1=(start_x, start_y),
+        p2=(end_x, end_y)
+    )
+    writer.add_annotation(page_number=0, annotation=annotation)
+
+
+        
+
 # Write file
 current_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 output_pdf = 'output_{}.pdf'.format(current_time)
 with open(output_pdf, "wb") as fp:
     writer.write(fp)
+
